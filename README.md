@@ -10,37 +10,37 @@ This repo contains the different layouts for my keyboard(s).
 
 ### Prepare QMK environment
 
-Whe are going to install the QMK CLI using a python virtual environment.
+We are going to install the QMK CLI using a python virtual environment.
 
-#### Create the venv.
+#### Create the venv
 
 ```bash
-python3 -m venv ~/kbd/qmk_env
+python3 -m venv ~/kbd/qmk_venv
 ```
 
-#### Activate the venv.
+#### Activate the venv
 
 ```bash
 source ~/kbd/qmk_venv/bin/activate
 ```
 
-#### Install the QMK CLI.
+#### Install the QMK CLI
 
 ```bash
 python3 -m pip install qmk
 ```
 
-#### Run qmk setup.
+#### Run qmk setup
 
 ```bash
 qmk setup -H ~/kbd/qmk_firmware
 qmk config user.keyboard=crkbd/rev4_1/standard
 ```
 
-#### Clone this repository.
+#### Clone this repository
 
 ```bash
-cd ~/bkd
+cd ~/kbd
 git clone https://github.com/ntw1vnl/qmk_userspace.git
 ```
 
@@ -52,13 +52,13 @@ qmk config user.overlay_dir="$(realpath qmk_userspace)"
 
 ### Build and flash firmware
 
-#### Make sure the the venv is activated.
+#### Make sure the the venv is activated
 
 ```bash
 source ~/kbd/qmk_venv/bin/activate
 ```
 
-#### Build the firmware.
+#### Build the firmware
 
 ```bash
 qmk compile -kb crkbd/rev4_1/standard -km ntw1vnl
