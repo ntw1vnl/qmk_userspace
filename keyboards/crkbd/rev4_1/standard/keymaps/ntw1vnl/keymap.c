@@ -50,113 +50,6 @@ const uint16_t PROGMEM jk_esc_combo[]        = {CTL_J, SFT_K, COMBO_END};
 combo_t key_combos[] = {COMBO(control_layer_combo, MO(LAYER_CONTROL)), COMBO(gui_thumb_combo, KC_LGUI), COMBO(jk_esc_combo, KC_ESC)};
 
 // clang-format off
-/*
-const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [LAYER_BASE] = LAYOUT_split_3x6_3(
-  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_ESC,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_BSLS,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LCTL,   GUI_A,   ALT_S,   SFT_D,   CTL_F,    KC_G,                         KC_H,   CTL_J,   SFT_K,   ALT_L,GUI_SCLN, KC_QUOT,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                           KC_ESC, LP_THMB, LS_THMB,    RS_THMB, RP_THMB,  KC_DEL
-                                      //`--------------------------'  `--------------------------'
-
-  ),
-
-    [LAYER_NAV] = LAYOUT_split_3x6_3(
-  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, KC_LGUI, KC_LALT, KC_LSFT, KC_LCTL, XXXXXXX,                      KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, XXXXXXX,  KC_CUT, KC_COPY, KC_PSTE, XXXXXXX,                      KC_HOME, KC_PGDN, KC_PGUP,  KC_END,  KC_INS, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          XXXXXXX, _______, XXXXXXX,     KC_ENT, KC_BSPC, KC_DEL
-                                      //`--------------------------'  `--------------------------'
-  ),
-
-    [LAYER_NUM] = LAYOUT_split_3x6_3(
-  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      XXXXXXX, KC_PSLS,    KC_9,    KC_8,    KC_7, KC_PMNS,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, KC_PAST,    KC_6,    KC_5,    KC_4, KC_PEQL,                      XXXXXXX, KC_RCTL, KC_RSFT, KC_RALT, KC_RGUI, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, KC_PCMM,    KC_3,    KC_2,    KC_1, KC_PPLS,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_PDOT,    KC_0, KC_PENT,    XXXXXXX, _______, XXXXXXX
-                                      //`--------------------------'  `--------------------------'
-  ),
-
-    [LAYER_SYM] = LAYOUT_split_3x6_3(
-  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_MINS,  KC_EQL,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, KC_LGUI, KC_LALT, KC_LSFT, KC_LCTL, XXXXXXX,                        KC_AT, KC_LBRC, KC_RBRC, KC_AMPR, KC_SCLN, KC_QUOT,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, XXXXXXX,  KC_CUT, KC_COPY, KC_PSTE, XXXXXXX,                      KC_EXLM, KC_LPRN, KC_RPRN, KC_ASTR, KC_SLSH, XXXXXXX,
-
-                                          XXXXXXX, XXXXXXX, _______,     KC_ENT, KC_BSPC, KC_DEL
-                                      //`--------------------------'  `--------------------------'
-  ),
-
-    [LAYER_FUN] = LAYOUT_split_3x6_3(
-  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      XXXXXXX,  KC_F12,   KC_F9,   KC_F8,   KC_F7, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX,  KC_F11,   KC_F6,   KC_F5,   KC_F4, XXXXXXX,                      XXXXXXX, KC_RCTL, KC_RSFT, KC_RALT, KC_RGUI, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX,  KC_F10,   KC_F3,   KC_F2,   KC_F1, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          XXXXXXX, XXXXXXX, XXXXXXX,    _______, XXXXXXX, XXXXXXX
-                                      //`--------------------------'  `--------------------------'
-  ),
-
-    [LAYER_CONTROL] = LAYOUT_split_3x6_3(
-  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, QK_BOOT,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      RM_TOGG, RM_HUEU, RM_SATU, RM_VALU, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      RM_NEXT, RM_HUED, RM_SATD, RM_VALD, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, _______
-                                      //`--------------------------'  `--------------------------'
-  )
-};
-// clang-format on
-*/
-
-// bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-//     for (uint8_t i = led_min; i < led_max; i++) {
-//         switch(get_highest_layer(layer_state|default_layer_state)) {
-//             case: LAYER_BASE:
-//                 rgb_matrix_set_color(i, RGB_BLUE);
-//                 break;
-//             case: LAYER_NAV:
-//                 rgb_matrix_set_color(i, RGB_BLUE);
-//                 break;
-//             case: LAYER_NUM:
-//                 rgb_matrix_set_color(i, RGB_BLUE);
-//                 break;
-//             case: LAYER_SYM:
-//                 rgb_matrix_set_color(i, RGB_BLUE);
-//                 break;
-//             case: LAYER_FUN:
-//                 rgb_matrix_set_color(i, RGB_BLUE);
-//                 break;
-//             case: LAYER_CONTROL:
-//                 rgb_matrix_set_color(i, RGB_BLUE);
-//                 break;
-//             default:
-//                 break;
-//         }
-//     }
-//     return false;
-// }
-
-// clang-format off
 #define LAYER_BASE_COLOR     HSV_OFF
 #define LAYER_NAV_COLOR      HSV_AZURE
 #define LAYER_NUM_COLOR      HSV_RED
@@ -164,18 +57,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #define LAYER_FUN_COLOR      HSV_ORANGE
 #define LAYER_CONTROL_COLOR  HSV_GOLD
 // clang-format on
-
-// bool get_retro_tapping(uint16_t keycode, keyrecord_t *record) {
-//     switch (keycode) {
-//         case GUI_A:
-//         case ALT_S:
-//         case ALT_L:
-//         case GUI_SCLN:
-//             return true;
-//         default:
-//             return false;
-//     }
-// }
 
 hsv_t get_layer_color(uint8_t layer) {
     switch (layer) {
