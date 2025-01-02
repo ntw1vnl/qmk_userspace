@@ -1,6 +1,10 @@
 # QMK Userspace
 
-This repo contains the layout for my corne V4.1 keyboard.
+This repo contains the different layouts for my keyboard(s).
+
+## Layouts
+
+-   [Corne V4.1](keyboards/crkbd/rev4_1/standard/keymaps/ntw1vnl/README.md)
 
 ## Setup
 
@@ -8,39 +12,39 @@ This repo contains the layout for my corne V4.1 keyboard.
 
 Whe are going to install the QMK CLI using a python virtual environment.
 
-1. Create the venv.
+#### Create the venv.
 
 ```bash
 python3 -m venv ~/kbd/qmk_env
 ```
 
-1. Activate the venv.
+#### Activate the venv.
 
 ```bash
 source ~/kbd/qmk_venv/bin/activate
 ```
 
-1. Install the QMK CLI.
+#### Install the QMK CLI.
 
 ```bash
 python3 -m pip install qmk
 ```
 
-1. Run qmk setup.
+#### Run qmk setup.
 
 ```bash
 qmk setup -H ~/kbd/qmk_firmware
 qmk config user.keyboard=crkbd/rev4_1/standard
 ```
 
-1. Clone this repository.
+#### Clone this repository.
 
 ```bash
 cd ~/bkd
 git clone https://github.com/ntw1vnl/qmk_userspace.git
 ```
 
-1. Enable QMK userspace in QMK config
+#### Enable QMK userspace in QMK config
 
 ```bash
 qmk config user.overlay_dir="$(realpath qmk_userspace)"
@@ -48,7 +52,7 @@ qmk config user.overlay_dir="$(realpath qmk_userspace)"
 
 ### Build and flash firmware
 
-1. Make sure the the venv is activated.
+#### Make sure the the venv is activated.
 
 ```bash
 source ~/kbd/qmk_venv/bin/activate

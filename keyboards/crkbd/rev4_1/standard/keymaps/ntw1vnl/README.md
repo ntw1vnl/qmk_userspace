@@ -2,6 +2,24 @@
 
 ## Base
 
+![Base layout](base.png)
+
 ## Navigation
 
-## :w
+![Navigation layout](nav.png)
+
+## Numbers
+
+![Numbers layout](num.png)
+
+## Symbols
+
+![Symbols layout](sym.png)
+
+## Functions
+
+![Functions layout](fun.png)
+
+## Control
+
+![Control layout](ctl.png)
