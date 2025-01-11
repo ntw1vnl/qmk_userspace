@@ -18,50 +18,80 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include QMK_KEYBOARD_H
 
-// Left-hand home row mods
-#define GUI_A LGUI_T(KC_A)
-#define ALT_S LALT_T(KC_S)
-#define SFT_D LSFT_T(KC_D)
-#define CTL_F LCTL_T(KC_F)
-
-// Right-hand home row mods
-#define CTL_J RCTL_T(KC_J)
-#define SFT_K RSFT_T(KC_K)
-#define ALT_L LALT_T(KC_L)
-#define GUI_SCLN RGUI_T(KC_SCLN)
-
 // Define layers
-enum Layer { LAYER_BASE, LAYER_NAV, LAYER_NUM, LAYER_SYM, LAYER_FUN, LAYER_CONTROL };
+enum Layer {
+    LAYER_BASE_QWERTY,
+    LAYER_BASE_COLEMAK,
+    LAYER_NAV,
+    LAYER_NUM,
+    LAYER_SYM,
+    LAYER_FUN,
+    LAYER_CONTROL
+};
 
 // Left-hand thumb cluster
 #define LP_THMB LT(LAYER_NAV, KC_SPC) // Left Primary Thumb
 #define LS_THMB LT(LAYER_SYM, KC_TAB) // Left Secondary Thumb
-// #define LT_THMB LT(LAYER_BASE, KC_ESC) // Left Tertiary Thumb
+// #define LT_THMB LT(LAYER_BASE_QWERTY, KC_ESC) // Left Tertiary Thumb
 
 // Right-hand thumb cluster
 #define RP_THMB LT(LAYER_NUM, KC_BSPC) // Right Primary Thumb
 #define RS_THMB LT(LAYER_FUN, KC_ENT)  // Right Secondary Thumb
-// #define RT_THMB LT(LAYER_BASE, KC_DEL) // Right Tertiary Thumb
+// #define RT_THMB LT(LAYER_BASE_QWERTY, KC_DEL) // Right Tertiary Thumb
 
-const uint16_t PROGMEM control_layer_combo[] = {KC_ESC, KC_DEL, COMBO_END};
-const uint16_t PROGMEM gui_thumb_combo[]     = {LP_THMB, RP_THMB, COMBO_END};
-const uint16_t PROGMEM jk_esc_combo[]        = {CTL_J, SFT_K, COMBO_END};
+enum Combo {
+    COMBO_CTL_LAYER,
+    COMBO_GUI_THMB,
+    COMBO_JK_ESC_QWERTY,
+    COMBO_JK_ESC_COLEMAK,
+    COMBO_CAPS_WORD_QWERTY
+};
 
-combo_t key_combos[] = {COMBO(control_layer_combo, MO(LAYER_CONTROL)), COMBO(gui_thumb_combo, KC_LGUI), COMBO(jk_esc_combo, KC_ESC)};
+//clang-format off
+const uint16_t PROGMEM control_layer_combo[]                = {KC_ESC, KC_DEL, COMBO_END};
+const uint16_t PROGMEM gui_thumb_combo[]                    = {LP_THMB, RP_THMB, COMBO_END};
+const uint16_t PROGMEM jk_esc_combo_qwerty[]                = {RCTL_T(KC_J), RSFT_T(KC_K), COMBO_END};
+const uint16_t PROGMEM jk_esc_combo_colemak[]               = {RCTL_T(KC_N), RSFT_T(KC_E), COMBO_END};
+const uint16_t PROGMEM both_shifts_caps_word_combo_qwerty[] = {LSFT_T(KC_D), RSFT_T(KC_K), COMBO_END};
+
+combo_t key_combos[] = {
+    [COMBO_CTL_LAYER] = COMBO(control_layer_combo, MO(LAYER_CONTROL)),
+    [COMBO_GUI_THMB] = COMBO(gui_thumb_combo, KC_LGUI),
+    [COMBO_JK_ESC_QWERTY] = COMBO(jk_esc_combo_qwerty, KC_ESC),
+    [COMBO_JK_ESC_COLEMAK] = COMBO(jk_esc_combo_colemak, KC_ESC),
+    [COMBO_CAPS_WORD_QWERTY] = COMBO_ACTION(both_shifts_caps_word_combo_qwerty)
+};
+//clang-format on
+
+void process_combo_event(uint16_t combo_index, bool pressed) {
+    switch (combo_index) {
+        case COMBO_CAPS_WORD_QWERTY:
+            if (pressed) {
+                caps_word_toggle();
+            }
+            break;
+        default:
+            break;
+    }
+}
 
 // clang-format off
-#define LAYER_BASE_COLOR     HSV_OFF
-#define LAYER_NAV_COLOR      HSV_AZURE
-#define LAYER_NUM_COLOR      HSV_RED
-#define LAYER_SYM_COLOR      HSV_GREEN
-#define LAYER_FUN_COLOR      HSV_ORANGE
-#define LAYER_CONTROL_COLOR  HSV_GOLD
+#define LAYER_BASE_QWERTY_COLOR     HSV_OFF
+#define LAYER_BASE_COLEMAK_COLOR    HSV_OFF
+#define LAYER_NAV_COLOR             HSV_AZURE
+#define LAYER_NUM_COLOR             HSV_RED
+#define LAYER_SYM_COLOR             HSV_GREEN
+#define LAYER_FUN_COLOR             HSV_ORANGE
+#define LAYER_CONTROL_COLOR         HSV_GOLD
+#define CAPS_WORD_COLOR             HSV_BLUE
 // clang-format on
 
 hsv_t get_layer_color(uint8_t layer) {
     switch (layer) {
-        case LAYER_BASE:
-            return (hsv_t){LAYER_BASE_COLOR};
+        case LAYER_BASE_QWERTY:
+            return (hsv_t){LAYER_BASE_QWERTY_COLOR};
+        case LAYER_BASE_COLEMAK:
+            return (hsv_t){LAYER_BASE_COLEMAK_COLOR};
         case LAYER_NAV:
             return (hsv_t){LAYER_NAV_COLOR};
         case LAYER_NUM:
@@ -89,11 +119,27 @@ void colorize_used_keys(rgb_t color_rgb, uint8_t layer, uint8_t led_min, uint8_t
     }
 }
 
+void colorize_all_keys(rgb_t color_rgb, uint8_t led_min, uint8_t led_max) {
+    for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
+        for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
+            uint8_t index = g_led_config.matrix_co[row][col];
+            if (index >= led_min && index < led_max && index != NO_LED) {
+                rgb_matrix_set_color(index, color_rgb.r, color_rgb.g, color_rgb.b);
+            }
+        }
+    }
+}
+
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    uint8_t layer = get_highest_layer(layer_state | default_layer_state);
-    hsv_t   hsv   = get_layer_color(layer);
-    rgb_t   rgb   = hsv_to_rgb(hsv);
-    colorize_used_keys(rgb, layer, led_min, led_max);
+    if (is_caps_word_on()) {
+        rgb_t rgb = hsv_to_rgb((hsv_t){LAYER_NUM_COLOR});
+        colorize_all_keys(rgb, led_min, led_max);
+    } else {
+        uint8_t layer = get_highest_layer(layer_state | default_layer_state);
+        hsv_t   hsv   = get_layer_color(layer);
+        rgb_t   rgb   = hsv_to_rgb(hsv);
+        colorize_used_keys(rgb, layer, led_min, led_max);
+    }
     return false;
 }
 

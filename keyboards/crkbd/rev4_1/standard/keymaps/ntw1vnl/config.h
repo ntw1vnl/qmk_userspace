@@ -22,9 +22,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // #define USE_MATRIX_I2C
 #define SPLIT_LAYER_STATE_ENABLE
+// #define SPLIT_TRANSPORT_MIRROR
+// #define SPLIT_MODS_ENABLE
+// #define SPLIT_ACTIVITY_ENABLE
 
 // #define RETRO_TAPPING_PER_KEY
 #define RETRO_TAPPING
+#define CAPS_WORD_INVERT_ON_SHIFT
 
 #define QUICK_TAP_TERM 120
 #define TAPPING_TERM 200
