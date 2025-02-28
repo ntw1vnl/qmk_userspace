@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 enum Layer {
     LAYER_BASE_QWERTY,
     LAYER_BASE_COLEMAK,
+    LAYER_BASE_GAMING,
     LAYER_NAV,
     LAYER_NUM,
     LAYER_SYM,
@@ -40,7 +41,8 @@ enum Layer {
 // #define RT_THMB LT(LAYER_BASE_QWERTY, KC_DEL) // Right Tertiary Thumb
 
 enum Combo {
-    COMBO_CTL_LAYER,
+    COMBO_CTL_LAYER_1,
+    COMBO_CTL_LAYER_2,
     COMBO_GUI_THMB,
     COMBO_JK_ESC_QWERTY,
     COMBO_JK_ESC_COLEMAK,
@@ -48,17 +50,21 @@ enum Combo {
 };
 
 //clang-format off
-const uint16_t PROGMEM control_layer_combo[]                = {KC_ESC, KC_DEL, COMBO_END};
+//Switch to control layer if in typing layer (QWERTY or COLEMAK)
+const uint16_t PROGMEM control_layer_combo_1[]                = {KC_ESC, KC_DEL, COMBO_END};
+//Switch to control layer if in gaming
+const uint16_t PROGMEM control_layer_combo_2[]                = {KC_END, KC_DEL, COMBO_END};
 const uint16_t PROGMEM gui_thumb_combo[]                    = {LP_THMB, RP_THMB, COMBO_END};
 const uint16_t PROGMEM jk_esc_combo_qwerty[]                = {RCTL_T(KC_J), RSFT_T(KC_K), COMBO_END};
 const uint16_t PROGMEM jk_esc_combo_colemak[]               = {RCTL_T(KC_N), RSFT_T(KC_E), COMBO_END};
 const uint16_t PROGMEM both_shifts_caps_word_combo_qwerty[] = {LSFT_T(KC_D), RSFT_T(KC_K), COMBO_END};
 
 combo_t key_combos[] = {
-    [COMBO_CTL_LAYER] = COMBO(control_layer_combo, MO(LAYER_CONTROL)),
+    [COMBO_CTL_LAYER_1] = COMBO(control_layer_combo_1, OSL(LAYER_CONTROL)),
+    [COMBO_CTL_LAYER_2] = COMBO(control_layer_combo_2, OSL(LAYER_CONTROL)),
     [COMBO_GUI_THMB] = COMBO(gui_thumb_combo, KC_LGUI),
-    [COMBO_JK_ESC_QWERTY] = COMBO(jk_esc_combo_qwerty, KC_ESC),
-    [COMBO_JK_ESC_COLEMAK] = COMBO(jk_esc_combo_colemak, KC_ESC),
+    /* [COMBO_JK_ESC_QWERTY] = COMBO(jk_esc_combo_qwerty, KC_ESC), */
+    /* [COMBO_JK_ESC_COLEMAK] = COMBO(jk_esc_combo_colemak, KC_ESC), */
     [COMBO_CAPS_WORD_QWERTY] = COMBO_ACTION(both_shifts_caps_word_combo_qwerty)
 };
 //clang-format on
@@ -78,6 +84,7 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
 // clang-format off
 #define LAYER_BASE_QWERTY_COLOR     HSV_OFF
 #define LAYER_BASE_COLEMAK_COLOR    HSV_OFF
+#define LAYER_BASE_GAMING_COLOR     HSV_OFF
 #define LAYER_NAV_COLOR             HSV_AZURE
 #define LAYER_NUM_COLOR             HSV_RED
 #define LAYER_SYM_COLOR             HSV_GREEN
@@ -92,6 +99,8 @@ hsv_t get_layer_color(uint8_t layer) {
             return (hsv_t){LAYER_BASE_QWERTY_COLOR};
         case LAYER_BASE_COLEMAK:
             return (hsv_t){LAYER_BASE_COLEMAK_COLOR};
+        case LAYER_BASE_GAMING:
+            return (hsv_t){LAYER_BASE_GAMING_COLOR};
         case LAYER_NAV:
             return (hsv_t){LAYER_NAV_COLOR};
         case LAYER_NUM:
@@ -112,7 +121,8 @@ void colorize_used_keys(rgb_t color_rgb, uint8_t layer, uint8_t led_min, uint8_t
     for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
         for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
             uint8_t index = g_led_config.matrix_co[row][col];
-            if (index >= led_min && index < led_max && index != NO_LED && keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
+            if (index >= led_min && index < led_max && index != NO_LED
+                && keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
                 rgb_matrix_set_color(index, color_rgb.r, color_rgb.g, color_rgb.b);
             }
         }
