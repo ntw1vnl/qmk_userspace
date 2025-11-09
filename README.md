@@ -24,6 +24,12 @@ python3 -m venv ~/kbd/qmk_venv
 source ~/kbd/qmk_venv/bin/activate
 ```
 
+or
+
+```fish
+source ~/kbd/qmk_venv/bin/activate.fish
+```
+
 #### Install the QMK CLI
 
 ```bash
@@ -54,9 +60,7 @@ qmk config user.overlay_dir="$(realpath qmk_userspace)"
 
 #### Make sure the the venv is activated
 
-```bash
-source ~/kbd/qmk_venv/bin/activate
-```
+See above
 
 #### Build the firmware
 
@@ -73,7 +77,11 @@ qmk userspace-compile
 
 #### Flash the firmware
 
-1. Connect the first side while in bootloader mode.
+1. Connect the first side while in bootloader mode. 
+
+> [!TIP]
+> Press `Q` or `P` key when connecting left or right side respectively.
+
 1. Mount the device.
 1. Go to userspace directory : `cd ~/kbd/qmk_userspace`
 1. Copy the firmware : `cp ./crkbd_rev4_1_standard_keymap.uf2 /run/media/username/RPI-RP2`
